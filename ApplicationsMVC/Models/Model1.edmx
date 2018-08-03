@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProjectDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApplicationForm">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dob" Type="datetime" Nullable="false" />
+          <Property Name="age" Type="int" Nullable="false" />
+          <Property Name="branch_id" Type="int" />
+          <Property Name="classid" Type="int" Nullable="false" />
+          <Property Name="category" Type="varchar" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="Branch">
+          <Key>
+            <PropertyRef Name="branch_id" />
+          </Key>
+          <Property Name="branch_id" Type="int" Nullable="false" />
+          <Property Name="contact_person" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="location" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProcessedForm">
+          <Key>
+            <PropertyRef Name="Application_id" />
+          </Key>
+          <Property Name="Application_id" Type="int" Nullable="false" />
+          <Property Name="comments" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="date_of_resolve" Type="datetime" />
+          <Property Name="resolved_By" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ProjectDB.dbo.Report' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Category" />
+            <PropertyRef Name="listApplications" />
+            <PropertyRef Name="totalByCategory" />
+            <PropertyRef Name="TotalNoApplications" />
+          </Key>
+          <Property Name="Category" Type="int" Nullable="false" />
+          <Property Name="listApplications" Type="int" Nullable="false" />
+          <Property Name="totalByCategory" Type="int" Nullable="false" />
+          <Property Name="TotalNoApplications" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ProjectDB.dbo.Seats' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Seats">
+          <Key>
+            <PropertyRef Name="branch_id" />
+            <PropertyRef Name="classid" />
+            <PropertyRef Name="seats" />
+          </Key>
+          <Property Name="branch_id" Type="int" Nullable="false" />
+          <Property Name="classid" Type="int" Nullable="false" />
+          <Property Name="seats" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Applicati__branc__2F10007B">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="ApplicationForm" Type="Self.ApplicationForm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="branch_id" />
+            </Principal>
+            <Dependent Role="ApplicationForm">
+              <PropertyRef Name="branch_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Processed__Appli__2E1BDC42">
+          <End Role="ApplicationForm" Type="Self.ApplicationForm" Multiplicity="1" />
+          <End Role="ProcessedForm" Type="Self.ProcessedForm" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationForm">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProcessedForm">
+              <PropertyRef Name="Application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjectDBModelStoreContainer">
+          <EntitySet Name="ApplicationForm" EntityType="Self.ApplicationForm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Branch" EntityType="Self.Branch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProcessedForm" EntityType="Self.ProcessedForm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Report].[Category] AS [Category], 
+[Report].[listApplications] AS [listApplications], 
+[Report].[totalByCategory] AS [totalByCategory], 
+[Report].[TotalNoApplications] AS [TotalNoApplications]
+FROM [dbo].[Report] AS [Report]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Seats" EntityType="Self.Seats" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Seats].[branch_id] AS [branch_id], 
+[Seats].[classid] AS [classid], 
+[Seats].[seats] AS [seats]
+FROM [dbo].[Seats] AS [Seats]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Applicati__branc__2F10007B" Association="Self.FK__Applicati__branc__2F10007B">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="ApplicationForm" EntitySet="ApplicationForm" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Processed__Appli__2E1BDC42" Association="Self.FK__Processed__Appli__2E1BDC42">
+            <End Role="ApplicationForm" EntitySet="ApplicationForm" />
+            <End Role="ProcessedForm" EntitySet="ProcessedForm" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProjectDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ApplicationForm">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dob" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="age" Type="Int32" Nullable="false" />
+          <Property Name="branch_id" Type="Int32" />
+          <Property Name="classid" Type="Int32" Nullable="false" />
+          <Property Name="category" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK__Applicati__branc__2F10007B" FromRole="ApplicationForm" ToRole="Branch" />
+          <NavigationProperty Name="ProcessedForm" Relationship="Self.FK__Processed__Appli__2E1BDC42" FromRole="ApplicationForm" ToRole="ProcessedForm" />
+        </EntityType>
+        <EntityType Name="Branch">
+          <Key>
+            <PropertyRef Name="branch_id" />
+          </Key>
+          <Property Name="branch_id" Type="Int32" Nullable="false" />
+          <Property Name="contact_person" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="location" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ApplicationForms" Relationship="Self.FK__Applicati__branc__2F10007B" FromRole="Branch" ToRole="ApplicationForm" />
+        </EntityType>
+        <EntityType Name="ProcessedForm">
+          <Key>
+            <PropertyRef Name="Application_id" />
+          </Key>
+          <Property Name="Application_id" Type="Int32" Nullable="false" />
+          <Property Name="comments" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="date_of_resolve" Type="DateTime" Precision="3" />
+          <Property Name="resolved_By" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ApplicationForm" Relationship="Self.FK__Processed__Appli__2E1BDC42" FromRole="ProcessedForm" ToRole="ApplicationForm" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Category" />
+            <PropertyRef Name="listApplications" />
+            <PropertyRef Name="totalByCategory" />
+            <PropertyRef Name="TotalNoApplications" />
+          </Key>
+          <Property Name="Category" Type="Int32" Nullable="false" />
+          <Property Name="listApplications" Type="Int32" Nullable="false" />
+          <Property Name="totalByCategory" Type="Int32" Nullable="false" />
+          <Property Name="TotalNoApplications" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Applicati__branc__2F10007B">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="ApplicationForm" Type="Self.ApplicationForm" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="branch_id" />
+            </Principal>
+            <Dependent Role="ApplicationForm">
+              <PropertyRef Name="branch_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Processed__Appli__2E1BDC42">
+          <End Role="ApplicationForm" Type="Self.ApplicationForm" Multiplicity="1" />
+          <End Role="ProcessedForm" Type="Self.ProcessedForm" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationForm">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProcessedForm">
+              <PropertyRef Name="Application_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjectDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ApplicationForms" EntityType="Self.ApplicationForm" />
+          <EntitySet Name="Branches" EntityType="Self.Branch" />
+          <EntitySet Name="ProcessedForms" EntityType="Self.ProcessedForm" />
+          <EntitySet Name="Reports" EntityType="Self.Report" />
+          <AssociationSet Name="FK__Applicati__branc__2F10007B" Association="Self.FK__Applicati__branc__2F10007B">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="ApplicationForm" EntitySet="ApplicationForms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Processed__Appli__2E1BDC42" Association="Self.FK__Processed__Appli__2E1BDC42">
+            <End Role="ApplicationForm" EntitySet="ApplicationForms" />
+            <End Role="ProcessedForm" EntitySet="ProcessedForms" />
+          </AssociationSet>
+          <EntitySet Name="Seats" EntityType="ProjectDBModel.Seat" />
+        </EntityContainer>
+        <EntityType Name="Seat">
+          <Key>
+            <PropertyRef Name="branch_id" />
+            <PropertyRef Name="classid" />
+            <PropertyRef Name="seats" />
+          </Key>
+          <Property Name="branch_id" Type="Int32" Nullable="false" />
+          <Property Name="classid" Type="Int32" Nullable="false" />
+          <Property Name="seats" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProjectDBModelStoreContainer" CdmEntityContainer="ProjectDBEntities">
+          <EntitySetMapping Name="ApplicationForms">
+            <EntityTypeMapping TypeName="ProjectDBModel.ApplicationForm">
+              <MappingFragment StoreEntitySet="ApplicationForm">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="branch_id" ColumnName="branch_id" />
+                <ScalarProperty Name="classid" ColumnName="classid" />
+                <ScalarProperty Name="category" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Branches">
+            <EntityTypeMapping TypeName="ProjectDBModel.Branch">
+              <MappingFragment StoreEntitySet="Branch">
+                <ScalarProperty Name="branch_id" ColumnName="branch_id" />
+                <ScalarProperty Name="contact_person" ColumnName="contact_person" />
+                <ScalarProperty Name="location" ColumnName="location" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProcessedForms">
+            <EntityTypeMapping TypeName="ProjectDBModel.ProcessedForm">
+              <MappingFragment StoreEntitySet="ProcessedForm">
+                <ScalarProperty Name="Application_id" ColumnName="Application_id" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="date_of_resolve" ColumnName="date_of_resolve" />
+                <ScalarProperty Name="resolved_By" ColumnName="resolved_By" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="ProjectDBModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="listApplications" ColumnName="listApplications" />
+                <ScalarProperty Name="totalByCategory" ColumnName="totalByCategory" />
+                <ScalarProperty Name="TotalNoApplications" ColumnName="TotalNoApplications" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seats">
+            <EntityTypeMapping TypeName="ProjectDBModel.Seat">
+              <MappingFragment StoreEntitySet="Seats">
+                <ScalarProperty Name="seats" ColumnName="seats" />
+                <ScalarProperty Name="classid" ColumnName="classid" />
+                <ScalarProperty Name="branch_id" ColumnName="branch_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

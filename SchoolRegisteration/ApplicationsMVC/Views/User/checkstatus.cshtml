@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "checkstatus";
+}
+
+<h2>checkstatus</h2>
+@using (Html.BeginForm())
+{
+<div>
+<label>Check your application status</label>
+    @Html.TextBox("txtcheck");
+</div>
+    <div>
+        <input type="submit" value="check status" />
+    </div>
+}

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ApplicationsMVC.Models.ApplicationForm>
+@{
+    ViewBag.Title = "Report";
+}
+
+<h2>Report</h2>
+@using (Html.BeginForm()) {
+<div>
+    <label>
+        Select
+    </label>
+    @Html.DropDownList("ddlmember", new List<SelectListItem> { new SelectListItem { Text="processed", Value="processed"},new SelectListItem { Text="not processed", Value="not processed"} },"select")
+    </div>
+    <div>
+        <label>Total Applications</label>
+        @Html.TextBox("txtno",Session["data"])
+      
+    </div>
+    <div>
+    <label>Total Processed Application</label>
+        @Html.TextBox("txtpno",Session["sdata"])</div>
+
+    
+    <div>
+        <input type="submit" value="ok" />
+    </div>
+    <div>
+        <table border="1">
+            <tr>
+                <th>Id</th>
+                <th>Canditate Name</th>
+                <th>
+                    Age
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>Date of Birth</th>
+                <th>
+                   Branch id
+                </th>
+                <th>Class id</th>
+                <th>Status</th>
+            </tr>
+            @foreach (var x in Model)
+            {
+                <tr>
+                    <td>
+                        @x.Id
+                    </td>
+                    <td>@x.name</td>
+                    <td>@x.age</td>
+                    <td>@x.address</td>
+                    <td>@x.dob</td>
+                    <td>
+                        @x.branch_id
+                    </td>
+                    <td>@x.classid</td>
+                    <td>@x.category</td>
+                </tr>
+            }
+        </table>
+    </div>
+}

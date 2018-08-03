@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "process";
+}
+
+<h2>process</h2>
+@using (Html.BeginForm())
+{
+<div>
+    <center><b>Process Application Form</b></center>
+</div>
+<div>
+    <label>Enter Application Id</label>
+    @Html.TextBox("txtid")
+    <input type="submit" value="status" name="command" />
+</div>
+<div>
+    <label>Enter comments</label>
+    @Html.TextBox("txtcmt")
+    
+</div>
+<div>
+    <input type="submit" value="Submit" name="command" />
+</div>
+}
